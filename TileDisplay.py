@@ -1,6 +1,6 @@
 # We use the tile display class to represent both factory displays and 
 # the pool of tiles in the centre of the playing area. 
-from AZUL.utils import Tile
+from utils import Tile
 
 
 class TileDisplay:

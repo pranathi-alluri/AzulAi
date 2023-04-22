@@ -3,8 +3,8 @@
 # state for each player; the state of the factory displays and 
 # centre tile pool; and the state of the tile bags. 
 import random
-from AZUL.Player import PlayerState
-from AZUL.TileDisplay import TileDisplay
+from Player import *
+from TileDisplay import *
 from utils import *
 
 

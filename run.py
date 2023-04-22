@@ -14,11 +14,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #
 from model import GameRunner,Player
-from iplayer import InteractivePlayer
-from naive_player import NaivePlayer
+from player import iplayer
+from player import naive_player
 from utils import *
 
-players = [InteractivePlayer(0), NaivePlayer(1), NaivePlayer(2),NaivePlayer(3)]
+players = [iplayer.InteractivePlayer(0), naive_player.NaivePlayer(1), naive_player.NaivePlayer(2), naive_player.NaivePlayer(3)]
 
 gr = GameRunner(players, 1384754856864)
 
