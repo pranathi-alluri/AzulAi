@@ -11,13 +11,13 @@ Pranathi Alluri and Yun Yi Park
 python run.py
 ```
 In run.py 
-### Default: naive player vs naive player
+#### Default: naive player vs naive player
 players = [naive_player.NaivePlayer(0), naive_player.NaivePlayer(1)]
-### To run intereactive player: 
+#### To run intereactive player: 
 players = [iplayer.InteractivePlayer(0), naive_player.NaivePlayer(1)]
-### To run Monte carlo Tree search:
+#### To run Monte carlo Tree search:
 players = [mctsPlayer.MctsPlayer(0), naive_player.NaivePlayer(1)]
-### To run multiple players:
+#### To run multiple players:
 Add a type of player to players list
 
 Game frame forked from Michelle Bloom's public repo. 
