@@ -16,9 +16,13 @@
 from model import GameRunner,Player
 from player import iplayer
 from player import naive_player
+from player import mctsPlayer
 from utils import *
 
-players = [iplayer.InteractivePlayer(0), naive_player.NaivePlayer(1), naive_player.NaivePlayer(2), naive_player.NaivePlayer(3)]
+
+players = [mctsPlayer.MctsPlayer(0), naive_player.NaivePlayer(1)]
+        
+        #,naive_player.NaivePlayer(2), naive_player.NaivePlayer(3)]
 
 gr = GameRunner(players, 1384754856864)
 
@@ -26,8 +30,10 @@ activity = gr.Run(True)
 
 print("Player 0 score is {}".format(activity[0][0]))
 print("Player 1 score is {}".format(activity[1][0]))
-print("Player 2 score is {}".format(activity[2][0]))
-print("Player 3 score is {}".format(activity[3][0]))
+if (len(players) == 3):
+    print("Player 2 score is {}".format(activity[2][0]))
+if (len(players) == 4):
+    print("Player 3 score is {}".format(activity[3][0]))
 
 
 #print("Player 0 round-by-round activity")
