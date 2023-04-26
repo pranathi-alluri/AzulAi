@@ -11,7 +11,6 @@ class monteCarloNodes(object):
         self.children = []
         self.visits = 0
         self.next_moves = game_state.players[player].GetAvailableMoves(game_state)
-        # self.next_moves = self.better_rollout_policy(self.unsorted_moves)
         self.wins = 0 
         self.loses = 0
 
@@ -54,8 +53,7 @@ class monteCarloNodes(object):
 
         while rollout_state.TilesRemaining() and count < 3:
             possible_moves = rollout_state.players[next_player].GetAvailableMoves(rollout_state)
-            # sorted_actions = self.better_rollout_policy(possible_moves)
-            action = self.rollout_policy(possible_moves)
+            action = self.better_rollout_policy(possible_moves)
             rollout_state.ExecuteMove(next_player, action)
             count += 1
             next_player = 1 - next_player
@@ -74,6 +72,31 @@ class monteCarloNodes(object):
     def rollout_policy(self, possible_moves):
         return possible_moves[np.random.randint(len(possible_moves))]
 
+    def better_rollout_policy(self, moves):
+        most_to_line = -1
+        corr_to_floor = 0
+
+        best_move = None
+
+        for mid,fid,tgrab in moves:
+            if most_to_line == -1:
+                best_move = (mid,fid,tgrab)
+                most_to_line = tgrab.num_to_pattern_line
+                corr_to_floor = tgrab.num_to_floor_line
+                continue
+
+            if tgrab.num_to_pattern_line > most_to_line:
+                best_move = (mid,fid,tgrab)
+                most_to_line = tgrab.num_to_pattern_line
+                corr_to_floor = tgrab.num_to_floor_line
+            elif tgrab.num_to_pattern_line == most_to_line and \
+                tgrab.num_to_pattern_line < corr_to_floor:
+                best_move = (mid,fid,tgrab)
+                most_to_line = tgrab.num_to_pattern_line
+                corr_to_floor = tgrab.num_to_floor_line
+
+        return best_move
+
     def backpropagate(self, result):
         self.visits += 1
         if result == 1:
@@ -81,13 +104,7 @@ class monteCarloNodes(object):
         else: 
             self.wins += 1
         if self.parent:
-            self.parent.backpropagate(1 - result) 
-
-    '''
-    def better_rollout_policy(self, possible_moves):
-        sorted_moves = sorted(possible_moves, key= lambda x: (x[2].num_to_floor_line, -x[2].num_to_pattern_line))
-        return sorted_moves 
-    '''
+            self.parent.backpropagate(1 - result)
 
 
 
