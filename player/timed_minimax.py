@@ -6,12 +6,13 @@
 
 import collections
 import copy
+import time
 import numpy
 from Player import Player
 from utils import *
 import math
 
-class MinMaxPlayer(Player):
+class TimedMinimax(Player):
     def __init__(self, id):
         super().__init__(id) 
 
@@ -131,7 +132,7 @@ class MinMaxPlayer(Player):
 
     def filter(self, plr_st, moves):  
 
-        if len(moves) > 4:  
+        if len(moves) > 7:  
             num_to_floor = move[2].num_to_floor_line 
             tile_type = move[2].tile_type
             pattern_line = move[2].pattern_line_dest
@@ -153,10 +154,9 @@ class MinMaxPlayer(Player):
                 if (tile_type, pattern_line) not in move_dict or numoffset>move_dict[(tile_type, pattern_line)][0]:
                     move_dict[(tile_type, pattern_line)] = (numoffset, unnecessary, move)
 
-            moves = [v[2] for k, v in sorted(move_dict.items(), key=lambda item: item[1][1]) ][:4]
+            moves = [v[2] for v in move_dict.values()]
 
-    def minimax(self, game_state, depth, maximizing=True):
-    
+    def minimax(self, game_state, depth, start_time, end_time, maximizing=True):
         # game ends 
         game_end = False
         for plr_state in game_state.players:
@@ -182,9 +182,10 @@ class MinMaxPlayer(Player):
             # only looking at most optimal moves
             filter(plr_state, moves)
             for move in moves: 
+                if time.time() - start_time > end_time: return (best_move, value) 
                 game_state_copy = copy.deepcopy(game_state)
                 game_state_copy.ExecuteMove(self.id, move)                
-                new_value = self.minimax(game_state_copy, depth-1, False)[1]
+                new_value = self.minimax(game_state_copy, depth-1,start_time, end_time, False)[1]
                 if new_value > value:
                     value = new_value
                     best_move = move
@@ -199,23 +200,29 @@ class MinMaxPlayer(Player):
             enemy_state = game_state.players[self.id*-1 + 1] 
             filter(enemy_state, moves) # only looking at most optimal moves
             for move in moves: 
+                if time.time() - start_time > end_time: return (best_move, value) 
                 game_state_copy = copy.deepcopy(game_state) 
                 game_state_copy.ExecuteMove(self.id*-1 + 1, move)                
-                new_value = self.minimax(game_state_copy, depth-1)[1]
+                new_value = self.minimax(game_state_copy, depth-1, start_time, end_time)[1]
                 if new_value < value:
                     value = new_value
                     best_move = move 
             return best_move, value  
-
-    def SelectMove(self, moves, game_state): 
-        depth = 0 
-        if len(moves) >55:
-            depth = 2
-        elif len(moves) >10:
-            depth = 3
-        else :
-            depth = 4
-        move = self.minimax(game_state, depth, True)[0]
-
-        return move
+ 
+    def SelectMove(self, moves, game_state):
+        start_time = time.time()
+        best_move = None
+        depth = 1
+        max_depth = 10
+        max_time = 3 
+        for depth in range (1, max_depth):
+            if time.time() - start_time > max_time: break 
+            # print(time.time())
+            best_value = -numpy.Infinity 
+            move, value = self.minimax(game_state, depth, start_time, max_time, True)
+            if value > best_value:
+                best_value = value
+                best_move = move
+        
+        return best_move
 

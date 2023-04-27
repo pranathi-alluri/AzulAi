@@ -15,7 +15,6 @@
 #
 from GameState import *
 from utils import *
-
 import numpy
 import random
 import abc
