@@ -16,20 +16,25 @@
 from model import GameRunner,Player
 from player import iplayer
 from player import naive_player
+from player import minimax
+from player import timed_minimax
+from player import alpha_beta_sort
+from player import alpha_beta
 from utils import *
 
-players = [iplayer.InteractivePlayer(0), naive_player.NaivePlayer(1), naive_player.NaivePlayer(2), naive_player.NaivePlayer(3)]
 
-gr = GameRunner(players, 1384754856864)
-
-activity = gr.Run(True)
-
-print("Player 0 score is {}".format(activity[0][0]))
-print("Player 1 score is {}".format(activity[1][0]))
-print("Player 2 score is {}".format(activity[2][0]))
-print("Player 3 score is {}".format(activity[3][0]))
-
-
+count = 0
+for i in range(50): 
+    players = [alpha_beta_sort.SortedAlphaBeta(0), naive_player.NaivePlayer(1)]
+    gr = GameRunner(players, 1384754856864)
+    activity = gr.Run(True)  
+    if (activity[0][0] > activity[1][0]):
+        count += 1
+    print("Player 0 score is {}".format(activity[0][0]))
+    print("Player 1 score is {}".format(activity[1][0]))
+    # print("Player 2 score is {}".format(activity[2][0]))
+    # print("Player 3 score is {}".format(activity[3][0]))
+print(count)
 #print("Player 0 round-by-round activity")
 #player_trace = activity[0][1]
 #for r in range(len(player_trace.moves)):

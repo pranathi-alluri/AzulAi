@@ -15,7 +15,6 @@
 #
 from GameState import *
 from utils import *
-
 import numpy
 import random
 import abc
@@ -28,7 +27,7 @@ class GameRunner:
 
         # Make sure we are forming a valid game, and that player
         # id's range from 0 to N-1, where N is the number of players.
-        assert(len(player_list) <= 2)
+        assert(len(player_list) <= 4)
         assert(len(player_list) > 1)
 
         i = 0
