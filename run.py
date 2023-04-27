@@ -20,12 +20,8 @@ from player import mctsPlayer
 from utils import *
 
 
-<<<<<<< HEAD
 players = [naive_Player.NaivePlayer(0), naive_player.NaivePlayer(1)]
 # ,naive_player.NaivePlayer(2), naive_player.NaivePlayer(3)]
-=======
-players = [naive_player.NaivePlayer(0), naive_player.NaivePlayer(1)]#,naive_player.NaivePlayer(2), naive_player.NaivePlayer(3)]
->>>>>>> 50f1c70 (Updates)
 
 gr = GameRunner(players, 1384754856864)
 
