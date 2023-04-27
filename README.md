@@ -15,6 +15,14 @@ In run.py
 players = [naive_player.NaivePlayer(0), naive_player.NaivePlayer(1)]
 #### To run intereactive player: 
 players = [iplayer.InteractivePlayer(0), naive_player.NaivePlayer(1)]
+#### To run naive Minimax
+minimax.MinMaxPlayer(0)
+#### To run timed minimax
+timed_minimax.TimedMinimax(0)
+#### To run alpha beta pruning
+alpha_beta.AlphaBeta(0)
+#### To run alpha beta pruning with sort
+alpha_beta_sort.SortedAlphaBeta(0)
 #### To run Monte carlo Tree search:
 players = [mctsPlayer.MctsPlayer(0), naive_player.NaivePlayer(1)]
 #### To run multiple players:
