@@ -13,6 +13,8 @@ from utils import *
 import math
 
 class SortedAlphaBeta(Player):
+
+    nodeExplored = 0
     def __init__(self, id):
         super().__init__(id) 
 
@@ -170,6 +172,7 @@ class SortedAlphaBeta(Player):
 
         # terminal node (when game_ends, round_ends, or when depth is 0)
         if game_end or round_end or depth == 0:
+            self.nodeExplored += 1
             value = self.evalulate_function(game_state)
             return (None, value)
         
@@ -212,18 +215,13 @@ class SortedAlphaBeta(Player):
     def SelectMove(self, moves, game_state):
         start_time = time.time()
         best_move = None
-        depth = 1
         max_depth = 10
-        max_time = 3 
+        max_time = 5 
         for depth in range (1, max_depth):
-            if time.time() - start_time > max_time: break 
-            # print(time.time())
             best_value = -numpy.Infinity 
             move, value = self.minimax(game_state, depth, start_time, max_time, True)
             if value > best_value:
                 best_value = value
-                best_move = move
-            depth += 1
-        
+                best_move = move 
         return best_move
 

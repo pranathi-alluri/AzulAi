@@ -12,7 +12,7 @@ from Player import Player
 from utils import *
 import math
 
-class AlphaBeta(Player):
+class AlphaBeta(Player): 
     def __init__(self, id):
         super().__init__(id) 
 
@@ -86,6 +86,7 @@ class AlphaBeta(Player):
         # Apply a discount factor to the estimated bonus score based on the current round number, and return it
         estimated_bonus = estimated_bonus * 0.6 ** (4 - round_num)
         return estimated_bonus
+
     
     def place_in_center(self, plr_st): 
         final = 0
@@ -120,15 +121,13 @@ class AlphaBeta(Player):
         player_score = game_state_copy.players[self.id].score
         opponent_score = game_state_copy.players[opponent_state.id].score 
 
-        # Feature 2-1: checks if the player has enough tiles in their bag to fill these vacancies
+        # Feature 2: checks if the player has enough tiles in their bag to fill these vacancies
         player_bonus = self.estimate_bonus(game_state_copy, plr_state, round_num)
         opponent_bonus = self.estimate_bonus(game_state_copy, opponent_state, round_num)    
 
         # Feature 3: place close to the center
         player_place_in_center = self.place_in_center(plr_state)
-        opponent_place_in_center = self.place_in_center(plr_state)      
-
-        grid_tile_cnt_diff, tile_exist_diff = self.empty_grids(game_state_copy)                   
+        opponent_place_in_center = self.place_in_center(plr_state)               
         return (player_score - opponent_score) + (player_bonus - opponent_bonus)  +  (player_place_in_center - opponent_place_in_center)
 
     def filter(self, plr_st, moves):  
@@ -155,9 +154,9 @@ class AlphaBeta(Player):
                 if (tile_type, pattern_line) not in move_dict or numoffset>move_dict[(tile_type, pattern_line)][0]:
                     move_dict[(tile_type, pattern_line)] = (numoffset, unnecessary, move)
 
-            moves = [v[2] for v in move_dict.values()]
+            moves = [v[2] for k, v in sorted(move_dict.items(), key=lambda item: item[1][1])]
 
-    def minimax(self, game_state, depth, start_time, end_time, alpha, beta, maximizing=True):
+    def minimax(self, game_state, depth, start_time, end_time, maximizing=True):
         # game ends 
         game_end = False
         for plr_state in game_state.players:
@@ -186,12 +185,10 @@ class AlphaBeta(Player):
                 if time.time() - start_time > end_time: return (best_move, value) 
                 game_state_copy = copy.deepcopy(game_state)
                 game_state_copy.ExecuteMove(self.id, move)                
-                new_value = self.minimax(game_state_copy, depth-1,start_time, end_time, alpha, beta, False)[1]
+                new_value = self.minimax(game_state_copy, depth-1,start_time, end_time, False)[1]
                 if new_value > value:
                     value = new_value
                     best_move = move
-                alpha = max(value, alpha) 
-                if alpha >= beta: break
 
             return best_move, value 
         
@@ -206,26 +203,22 @@ class AlphaBeta(Player):
                 if time.time() - start_time > end_time: return (best_move, value) 
                 game_state_copy = copy.deepcopy(game_state) 
                 game_state_copy.ExecuteMove(self.id*-1 + 1, move)                
-                new_value = self.minimax(game_state_copy, depth-1, start_time, end_time, alpha, beta)[1]
+                new_value = self.minimax(game_state_copy, depth-1, start_time, end_time)[1]
                 if new_value < value:
                     value = new_value
                     best_move = move 
-                beta = min(value, beta)
-                if alpha >= beta: break 
-
             return best_move, value  
  
     def SelectMove(self, moves, game_state):
         start_time = time.time()
         best_move = None
-        max_depth = 500
-        max_time = 5
-        for depth in range (1, max_depth): 
+        max_depth = 10
+        max_time = 5  
+        for depth in range (1, max_depth):
             best_value = -numpy.Infinity 
-            move, value = self.minimax(game_state, depth, start_time, max_time, -numpy.Infinity, +numpy.Infinity, True)
+            move, value = self.minimax(game_state, depth, start_time, max_time, True)
             if value > best_value:
                 best_value = value
-                best_move = move
-        
+                best_move = move 
         return best_move
 

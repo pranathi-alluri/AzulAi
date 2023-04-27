@@ -12,7 +12,7 @@ from Player import Player
 from utils import *
 import math
 
-class TimedMinimax(Player):
+class TimedMinimax(Player): 
     def __init__(self, id):
         super().__init__(id) 
 
@@ -170,6 +170,7 @@ class TimedMinimax(Player):
 
         # terminal node (when game_ends, round_ends, or when depth is 0)
         if game_end or round_end or depth == 0:
+            self.nodes += 1
             value = self.evalulate_function(game_state)
             return (None, value)
         
@@ -214,15 +215,13 @@ class TimedMinimax(Player):
         best_move = None
         depth = 1
         max_depth = 10
-        max_time = 3 
+        max_time = 5 
         for depth in range (1, max_depth):
-            if time.time() - start_time > max_time: break 
-            # print(time.time())
             best_value = -numpy.Infinity 
             move, value = self.minimax(game_state, depth, start_time, max_time, True)
             if value > best_value:
                 best_value = value
                 best_move = move
-        
+        print(self.nodes)
         return best_move
 
