@@ -16,12 +16,12 @@
 from model import GameRunner,Player
 from player import iplayer
 from player import naive_player
+
 from player import minimax
 from player import timed_minimax
 from player import alpha_beta_sort
 from player import alpha_beta
 from utils import *
-
 
 count = 0
 for i in range(50): 
