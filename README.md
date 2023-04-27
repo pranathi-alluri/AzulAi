@@ -20,4 +20,4 @@ players = [mctsPlayer.MctsPlayer(0), naive_player.NaivePlayer(1)]
 #### To run multiple players:
 Add a type of player to players list
 
-Game frame forked from Michelle Bloom's public repo. 
+Game frame forked from Michelle Blom's public repo. 
